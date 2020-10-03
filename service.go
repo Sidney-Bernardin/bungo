@@ -8,6 +8,7 @@ import (
 type Service struct {
 	client   *http.Client
 	BasePath string // API endpoint base URL.
+	Config   *ServiceConfig
 
 	// App      *AppService
 	// User     *UserService
@@ -21,21 +22,17 @@ type Service struct {
 
 }
 
-func NewService(client *http.Client, config ServiceConfigInterface) (*Service, error) {
+func NewService(client *http.Client, config *ServiceConfig) (*Service, error) {
 
 	if client == nil {
 		return nil, errors.New("client is nil")
-	}
-
-	// Validate api key.
-	if err := config.ValidateApiKey(); err != nil {
-		return nil, errors.New("bad api key")
 	}
 
 	// Create the service.
 	s := &Service{
 		client:   client,
 		BasePath: basePath,
+		Config:   config,
 	}
 
 	// Create the sub services.
