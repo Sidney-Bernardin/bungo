@@ -1,2 +1,2 @@
-# d2-api-client
-A client library got the official destiny 2 api.
+# desting-2-api-client
+A client library for the official destiny 2 api.
