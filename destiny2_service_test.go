@@ -27,7 +27,7 @@ func TestGetEntityDefinition(t *testing.T) {
 
 	_, err = s.Destiny2.GetDestinyEntityDefinition().
 		EntityType("DestinyInventoryItemDefinition").
-		HashIdentifier("720351794").
+		//HashIdentifier("123").
 		Do()
 
 	if err != nil {

@@ -117,6 +117,14 @@ func (c *GetDestinyEntityDefinitionCall) Do() (*GetDestinyEntityDefinitionRespon
 
 func (c *GetDestinyEntityDefinitionCall) doRequest() (*http.Response, error) {
 
+	if _, ok := c.pathParams["entityType"]; !ok {
+		c.pathParams["entityType"] = "empty"
+	}
+
+	if _, ok := c.pathParams["hashIdentifier"]; !ok {
+		c.pathParams["hashIdentifier"] = "empty"
+	}
+
 	url := fmt.Sprintf("%sDestiny2/Manifest/%s/%s",
 		c.s.BasePath,
 		c.pathParams["entityType"],
