@@ -1,6 +1,6 @@
-package main
+package responses
 
-type Manifest struct {
+type DestinyManifest struct {
 	Version                        string                         `json:"version"`
 	MobileAssetContentPath         string                         `json:"mobileAssetContentPath"`
 	MobileGearAssetDataBases       []MobileGearAssetDataBases     `json:"mobileGearAssetDataBases"`
