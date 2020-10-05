@@ -25,10 +25,7 @@ func TestGetEntityDefinition(t *testing.T) {
 		t.Fatalf("couldn't create service: %+v\n", err)
 	}
 
-	_, err = s.Destiny2.GetDestinyEntityDefinition().
-		EntityType("DestinyInventoryItemDefinition").
-		HashIdentifier("720351794").
-		Do()
+	_, err = s.Destiny2.GetDestinyEntityDefinition("DestinyInventoryItemDefinition", "720351794").Do()
 
 	if err != nil {
 		t.Fatalf("couldn't get item: %+v\n", err)
@@ -42,18 +39,13 @@ func TestSearchDestinyPlayer(t *testing.T) {
 		t.Fatalf("couldn't create service: %+v\n", err)
 	}
 
-	_, err = s.Destiny2.SearchDestinyPlayer().
-		MembershipType("2").
-		DisplayName("a_neutrino").
-		Do()
+	_, err = s.Destiny2.SearchDestinyPlayer("2", "a_neutrino").Do()
 
 	if err != nil {
 		t.Fatalf("couldn't get destiny player: %+v\n", err)
 	}
 
-	_, err = s.Destiny2.SearchDestinyPlayer().
-		MembershipType("2").
-		DisplayName("a_neutrino").
+	_, err = s.Destiny2.SearchDestinyPlayer("2", "a_neutrino").
 		ReturnOriginalProfile("true").
 		Do()
 

@@ -1,15 +1,12 @@
 package responses
 
-type DestinyManifest struct {
-	Version                        string                         `json:"version"`
-	MobileAssetContentPath         string                         `json:"mobileAssetContentPath"`
-	MobileGearAssetDataBases       []MobileGearAssetDataBases     `json:"mobileGearAssetDataBases"`
-	MobileWorldContentPaths        MobileWorldContentPaths        `json:"mobileWorldContentPaths"`
-	JSONWorldContentPaths          JSONWorldContentPaths          `json:"jsonWorldContentPaths"`
-	JSONWorldComponentContentPaths JSONWorldComponentContentPaths `json:"jsonWorldComponentContentPaths"`
-	MobileClanBannerDatabasePath   string                         `json:"mobileClanBannerDatabasePath"`
-	MobileGearCDN                  MobileGearCDN                  `json:"mobileGearCDN"`
-	IconImagePyramidInfo           []interface{}                  `json:"iconImagePyramidInfo"`
+type GetDestinyManifestResponse struct {
+	Response        Response    `json:"Response"`
+	ErrorCode       int         `json:"ErrorCode"`
+	ThrottleSeconds int         `json:"ThrottleSeconds"`
+	ErrorStatus     string      `json:"ErrorStatus"`
+	Message         string      `json:"Message"`
+	MessageData     MessageData `json:"MessageData"`
 }
 type MobileGearAssetDataBases struct {
 	Version int    `json:"version"`
@@ -1067,4 +1064,17 @@ type MobileGearCDN struct {
 	PlateRegion string `json:"PlateRegion"`
 	Gear        string `json:"Gear"`
 	Shader      string `json:"Shader"`
+}
+type Response struct {
+	Version                        string                         `json:"version"`
+	MobileAssetContentPath         string                         `json:"mobileAssetContentPath"`
+	MobileGearAssetDataBases       []MobileGearAssetDataBases     `json:"mobileGearAssetDataBases"`
+	MobileWorldContentPaths        MobileWorldContentPaths        `json:"mobileWorldContentPaths"`
+	JSONWorldContentPaths          JSONWorldContentPaths          `json:"jsonWorldContentPaths"`
+	JSONWorldComponentContentPaths JSONWorldComponentContentPaths `json:"jsonWorldComponentContentPaths"`
+	MobileClanBannerDatabasePath   string                         `json:"mobileClanBannerDatabasePath"`
+	MobileGearCDN                  MobileGearCDN                  `json:"mobileGearCDN"`
+	IconImagePyramidInfo           []interface{}                  `json:"iconImagePyramidInfo"`
+}
+type MessageData struct {
 }

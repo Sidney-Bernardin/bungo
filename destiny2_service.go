@@ -19,33 +19,26 @@ func (s *Destiny2Service) GetDestinyManifest() *GetDestinyManifestCall {
 	return &GetDestinyManifestCall{s: s.s}
 }
 
-type GetDestinyManifestResponse struct {
-	Response        responses.DestinyManifest `json:"Response"`
-	ErrorCode       int                       `json:"ErrorCode"`
-	ThrottleSeconds int                       `json:"ThrottleSeconds"`
-	ErrorStatus     string                    `json:"ErrorStatus"`
-	Message         string                    `json:"Message"`
-	MessageData     map[string]string         `json:"MessageData"`
-}
-
 type GetDestinyManifestCall struct {
 	s *Service
 }
 
-func (c *GetDestinyManifestCall) Do() (*GetDestinyManifestResponse, error) {
+func (c *GetDestinyManifestCall) Do() (*responses.GetDestinyManifestResponse, error) {
 
+	// Make the request.
 	res, err := c.doRequest()
 	if err != nil {
 		return nil, err
 	}
 	defer res.Body.Close()
 
-	var ret = &GetDestinyManifestResponse{}
-
+	// Decode the response.
+	var ret = &responses.GetDestinyManifestResponse{}
 	if err := json.NewDecoder(res.Body).Decode(ret); err != nil {
 		return nil, err
 	}
 
+	// Check the error code.
 	if ret.ErrorCode != 1 {
 		return nil, fmt.Errorf("%s: %s", ret.ErrorStatus, ret.Message)
 	}
@@ -55,59 +48,50 @@ func (c *GetDestinyManifestCall) Do() (*GetDestinyManifestResponse, error) {
 
 func (c *GetDestinyManifestCall) doRequest() (*http.Response, error) {
 
+	// Create the url.
 	url := c.s.BasePath + "Destiny2/Manifest/"
 
+	// Create the request.
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		return nil, err
 	}
 
+	// Execute the request.
 	return c.s.client.Do(req)
 }
 
-func (s *Destiny2Service) GetDestinyEntityDefinition() *GetDestinyEntityDefinitionCall {
-	return &GetDestinyEntityDefinitionCall{s: s.s, pathParams: map[string]string{}}
-}
-
-type GetDestinyEntityDefinitionResponse struct {
-	Response        responses.DestinyDefinition `json:"Response"`
-	ErrorCode       int                         `json:"ErrorCode"`
-	ThrottleSeconds int                         `json:"ThrottleSeconds"`
-	ErrorStatus     string                      `json:"ErrorStatus"`
-	Message         string                      `json:"Message"`
-	MessageData     map[string]string           `json:"MessageData"`
+func (s *Destiny2Service) GetDestinyEntityDefinition(entityType, hashIdentifier string) *GetDestinyEntityDefinitionCall {
+	return &GetDestinyEntityDefinitionCall{
+		s:              s.s,
+		entityType:     entityType,
+		hashIdentifier: hashIdentifier,
+	}
 }
 
 type GetDestinyEntityDefinitionCall struct {
-	s          *Service
-	pathParams map[string]string
-	header     *http.Header
+	s              *Service
+	entityType     string
+	hashIdentifier string
+	header         *http.Header
 }
 
-func (c *GetDestinyEntityDefinitionCall) EntityType(entityType string) *GetDestinyEntityDefinitionCall {
-	c.pathParams["entityType"] = entityType
-	return c
-}
+func (c *GetDestinyEntityDefinitionCall) Do() (*responses.GetEntityDefinitionResponse, error) {
 
-func (c *GetDestinyEntityDefinitionCall) HashIdentifier(hashIdentifier string) *GetDestinyEntityDefinitionCall {
-	c.pathParams["hashIdentifier"] = hashIdentifier
-	return c
-}
-
-func (c *GetDestinyEntityDefinitionCall) Do() (*GetDestinyEntityDefinitionResponse, error) {
-
+	// Make the request.
 	res, err := c.doRequest()
 	if err != nil {
 		return nil, err
 	}
 	defer res.Body.Close()
 
-	var ret = &GetDestinyEntityDefinitionResponse{}
-
+	// Decode the response.
+	var ret = &responses.GetEntityDefinitionResponse{}
 	if err := json.NewDecoder(res.Body).Decode(ret); err != nil {
 		return nil, err
 	}
 
+	// Check the error code.
 	if ret.ErrorCode != 1 {
 		return nil, fmt.Errorf("%s: %s", ret.ErrorStatus, ret.Message)
 	}
@@ -117,77 +101,61 @@ func (c *GetDestinyEntityDefinitionCall) Do() (*GetDestinyEntityDefinitionRespon
 
 func (c *GetDestinyEntityDefinitionCall) doRequest() (*http.Response, error) {
 
-	if _, ok := c.pathParams["entityType"]; !ok {
-		c.pathParams["entityType"] = "empty"
-	}
-
-	if _, ok := c.pathParams["hashIdentifier"]; !ok {
-		c.pathParams["hashIdentifier"] = "empty"
-	}
-
+	// Create url.
 	url := fmt.Sprintf("%sDestiny2/Manifest/%s/%s",
 		c.s.BasePath,
-		c.pathParams["entityType"],
-		c.pathParams["hashIdentifier"])
+		c.entityType,
+		c.hashIdentifier)
 
+	// Create request.
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		return nil, err
 	}
-
 	req.Header.Set("X-API-KEY", c.s.Config.ApiKey)
 
+	// Execute the request.
 	return c.s.client.Do(req)
 }
 
-func (s *Destiny2Service) SearchDestinyPlayer() *SearchDestinyPlayerCall {
-	return &SearchDestinyPlayerCall{s: s.s, pathParams: map[string]string{}}
-}
-
-type SearchDestinyPlayerResponse struct {
-	Response        []responses.UserInfoCard `json:"Response"`
-	ErrorCode       int                      `json:"ErrorCode"`
-	ThrottleSeconds int                      `json:"ThrottleSeconds"`
-	ErrorStatus     string                   `json:"ErrorStatus"`
-	Message         string                   `json:"Message"`
-	MessageData     map[string]string        `json:"MessageData"`
+func (s *Destiny2Service) SearchDestinyPlayer(membershipType, displayName string) *SearchDestinyPlayerCall {
+	return &SearchDestinyPlayerCall{
+		s:              s.s,
+		membershipType: membershipType,
+		displayName:    displayName,
+		queryParams:    map[string]string{},
+	}
 }
 
 type SearchDestinyPlayerCall struct {
-	s          *Service
-	pathParams map[string]string
-	header     *http.Header
-}
-
-func (c *SearchDestinyPlayerCall) MembershipType(membershipType string) *SearchDestinyPlayerCall {
-	c.pathParams["membershipType"] = membershipType
-	return c
-}
-
-func (c *SearchDestinyPlayerCall) DisplayName(displayName string) *SearchDestinyPlayerCall {
-	c.pathParams["displayName"] = displayName
-	return c
+	s              *Service
+	membershipType string
+	displayName    string
+	queryParams    map[string]string
+	header         *http.Header
 }
 
 func (c *SearchDestinyPlayerCall) ReturnOriginalProfile(arg string) *SearchDestinyPlayerCall {
-	c.pathParams["returnOriginalProfile"] = arg
+	c.queryParams["returnOriginalProfile"] = arg
 	return c
 }
 
-func (c *SearchDestinyPlayerCall) Do() (*SearchDestinyPlayerResponse, error) {
+func (c *SearchDestinyPlayerCall) Do() (*responses.SearchDestinyPlayerResponse, error) {
 
+	// Make the request.
 	res, err := c.doRequest()
 	if err != nil {
 		return nil, err
 	}
 	defer res.Body.Close()
 
-	var ret = &SearchDestinyPlayerResponse{}
-
+	// Decode the response.
+	var ret = &responses.SearchDestinyPlayerResponse{}
 	if err := json.NewDecoder(res.Body).Decode(ret); err != nil {
 		return nil, err
 	}
 
+	// Check the error code.
 	if ret.ErrorCode != 1 {
 		return nil, fmt.Errorf("%s: %s", ret.ErrorStatus, ret.Message)
 	}
@@ -197,25 +165,26 @@ func (c *SearchDestinyPlayerCall) Do() (*SearchDestinyPlayerResponse, error) {
 
 func (c *SearchDestinyPlayerCall) doRequest() (*http.Response, error) {
 
-	if _, ok := c.pathParams["membershipType"]; !ok {
-		c.pathParams["membershipType"] = "empty"
-	}
-
-	if _, ok := c.pathParams["displayName"]; !ok {
-		c.pathParams["displayName"] = "empty"
-	}
-
+	// Setup url.
 	url := fmt.Sprintf("%sDestiny2/SearchDestinyPlayer/%s/%s",
 		c.s.BasePath,
-		c.pathParams["membershipType"],
-		c.pathParams["displayName"])
+		c.membershipType,
+		c.displayName)
 
+	// Atatch params params to the url.
+	params := "?"
+	for k, v := range c.queryParams {
+		params += k + "=" + v + "&"
+	}
+	url += params
+
+	// Create request.
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		return nil, err
 	}
-
 	req.Header.Set("X-API-KEY", c.s.Config.ApiKey)
 
+	// Execute the request.
 	return c.s.client.Do(req)
 }
