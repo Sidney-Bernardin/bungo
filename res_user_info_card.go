@@ -1,4 +1,4 @@
-package responses
+package gotoorbit
 
 type SearchDestinyPlayerResponse struct {
 	Response []struct {

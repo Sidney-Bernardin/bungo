@@ -1,4 +1,4 @@
-package destiny2lib
+package gotoorbit
 
 import (
 	"net/http"
@@ -40,7 +40,6 @@ func TestSearchDestinyPlayer(t *testing.T) {
 	}
 
 	_, err = s.Destiny2.SearchDestinyPlayer("2", "a_neutrino").Do()
-
 	if err != nil {
 		t.Fatalf("couldn't get destiny player: %+v\n", err)
 	}

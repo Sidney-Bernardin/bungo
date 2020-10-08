@@ -1,4 +1,4 @@
-package destiny2lib
+package gotoorbit
 
 const (
 	basePath = "https://www.bungie.net/Platform/"

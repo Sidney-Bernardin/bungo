@@ -1,10 +1,9 @@
-package destiny2lib
+package gotoorbit
 
 import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"root/responses"
 )
 
 type Destiny2Service struct {
@@ -23,7 +22,7 @@ type GetDestinyManifestCall struct {
 	s *Service
 }
 
-func (c *GetDestinyManifestCall) Do() (*responses.GetDestinyManifestResponse, error) {
+func (c *GetDestinyManifestCall) Do() (*GetDestinyManifestResponse, error) {
 
 	// Make the request.
 	res, err := c.doRequest()
@@ -33,7 +32,7 @@ func (c *GetDestinyManifestCall) Do() (*responses.GetDestinyManifestResponse, er
 	defer res.Body.Close()
 
 	// Decode the response.
-	var ret = &responses.GetDestinyManifestResponse{}
+	var ret = &GetDestinyManifestResponse{}
 	if err := json.NewDecoder(res.Body).Decode(ret); err != nil {
 		return nil, err
 	}
@@ -76,7 +75,7 @@ type GetDestinyEntityDefinitionCall struct {
 	header         *http.Header
 }
 
-func (c *GetDestinyEntityDefinitionCall) Do() (*responses.GetEntityDefinitionResponse, error) {
+func (c *GetDestinyEntityDefinitionCall) Do() (*GetEntityDefinitionResponse, error) {
 
 	// Make the request.
 	res, err := c.doRequest()
@@ -86,7 +85,7 @@ func (c *GetDestinyEntityDefinitionCall) Do() (*responses.GetEntityDefinitionRes
 	defer res.Body.Close()
 
 	// Decode the response.
-	var ret = &responses.GetEntityDefinitionResponse{}
+	var ret = &GetEntityDefinitionResponse{}
 	if err := json.NewDecoder(res.Body).Decode(ret); err != nil {
 		return nil, err
 	}
@@ -140,7 +139,7 @@ func (c *SearchDestinyPlayerCall) ReturnOriginalProfile(arg string) *SearchDesti
 	return c
 }
 
-func (c *SearchDestinyPlayerCall) Do() (*responses.SearchDestinyPlayerResponse, error) {
+func (c *SearchDestinyPlayerCall) Do() (*SearchDestinyPlayerResponse, error) {
 
 	// Make the request.
 	res, err := c.doRequest()
@@ -150,7 +149,7 @@ func (c *SearchDestinyPlayerCall) Do() (*responses.SearchDestinyPlayerResponse, 
 	defer res.Body.Close()
 
 	// Decode the response.
-	var ret = &responses.SearchDestinyPlayerResponse{}
+	var ret = &SearchDestinyPlayerResponse{}
 	if err := json.NewDecoder(res.Body).Decode(ret); err != nil {
 		return nil, err
 	}

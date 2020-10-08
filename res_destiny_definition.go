@@ -1,4 +1,4 @@
-package responses
+package gotoorbit
 
 type GetEntityDefinitionResponse struct {
 	Response struct {

@@ -1,4 +1,4 @@
-package responses
+package gotoorbit
 
 type GetDestinyManifestResponse struct {
 	Response        Response    `json:"Response"`
