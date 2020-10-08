@@ -1,4 +1,4 @@
-package gotoorbit
+package bungo
 
 type SearchDestinyPlayerResponse struct {
 	Response []struct {

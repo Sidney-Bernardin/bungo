@@ -1,4 +1,4 @@
-package gotoorbit
+package bungo
 
 type GetDestinyManifestResponse struct {
 	Response        Response    `json:"Response"`

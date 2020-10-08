@@ -1,2 +1,2 @@
 # bungo
-A client library for the official destiny 2 api.
+A client library for the official bungie.net api.

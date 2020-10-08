@@ -1,4 +1,4 @@
-package gotoorbit
+package bungo
 
 import (
 	"net/http"
