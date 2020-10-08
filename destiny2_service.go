@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"root/responses"
+	"github.com/Sidney-Bernardin/go-to-orbit/responses"
 )
 
 type Destiny2Service struct {
