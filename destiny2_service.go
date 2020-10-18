@@ -280,7 +280,7 @@ func (c *EquipItemCall) doRequest() (*http.Response, error) {
 	return c.s.client.Do(req)
 }
 
-func (s *destiny2Service) GetLinkedProfiles(membershipId, membershipType string) *GetLinkedProfilesCall {
+func (s *destiny2Service) GetLinkedProfiles(membershipType, membershipId string) *GetLinkedProfilesCall {
 	return &GetLinkedProfilesCall{
 		s:              s.s,
 		membershipId:   membershipId,
@@ -336,7 +336,7 @@ func (c *GetLinkedProfilesCall) Do() (*LinkedProfilesResponse, error) {
 func (c *GetLinkedProfilesCall) doRequest() (*http.Response, error) {
 
 	// Setup url.
-	url := fmt.Sprintf("%sDestiny2/%s/Profile/%s/LinkedProfiles/?", c.s.basePath, c.membershipType, c.membershipId)
+	url := fmt.Sprintf("%sDestiny2/%s/Profile/%s/LinkedProfiles?", c.s.basePath, c.membershipType, c.membershipId)
 
 	// Atatch params params to the url.
 	for k, v := range c.queryParams {
