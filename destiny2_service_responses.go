@@ -1,5 +1,7 @@
 package bungo
 
+import "time"
+
 type GetEntityDefinitionResponse struct {
 	Response struct {
 		DisplayProperties struct {
@@ -261,6 +263,64 @@ type GetEntityDefinitionResponse struct {
 		Redacted                          bool          `json:"redacted"`
 		Blacklisted                       bool          `json:"blacklisted"`
 	} `json:"Response"`
+	ErrorCode       int    `json:"ErrorCode"`
+	ThrottleSeconds int    `json:"ThrottleSeconds"`
+	ErrorStatus     string `json:"ErrorStatus"`
+	Message         string `json:"Message"`
+	MessageData     struct {
+	} `json:"MessageData"`
+}
+type SearchDestinyPlayerResponse struct {
+	Response []struct {
+		IconPath          string `json:"iconPath"`
+		CrossSaveOverride int    `json:"crossSaveOverride"`
+		IsPublic          bool   `json:"isPublic"`
+		MembershipType    int    `json:"membershipType"`
+		MembershipID      string `json:"membershipId"`
+		DisplayName       string `json:"displayName"`
+	} `json:"Response"`
+	ErrorCode       int    `json:"ErrorCode"`
+	ThrottleSeconds int    `json:"ThrottleSeconds"`
+	ErrorStatus     string `json:"ErrorStatus"`
+	Message         string `json:"Message"`
+	MessageData     struct {
+	} `json:"MessageData"`
+}
+
+type LinkedProfilesResponse struct {
+	Response struct {
+		Profiles []struct {
+			DateLastPlayed            time.Time `json:"dateLastPlayed"`
+			IsOverridden              bool      `json:"isOverridden"`
+			IsCrossSavePrimary        bool      `json:"isCrossSavePrimary"`
+			CrossSaveOverride         int       `json:"crossSaveOverride"`
+			ApplicableMembershipTypes []int     `json:"applicableMembershipTypes"`
+			IsPublic                  bool      `json:"isPublic"`
+			MembershipType            int       `json:"membershipType"`
+			MembershipID              string    `json:"membershipId"`
+			DisplayName               string    `json:"displayName"`
+		} `json:"profiles"`
+		BnetMembership struct {
+			SupplementalDisplayName string `json:"supplementalDisplayName"`
+			IconPath                string `json:"iconPath"`
+			CrossSaveOverride       int    `json:"crossSaveOverride"`
+			IsPublic                bool   `json:"isPublic"`
+			MembershipType          int    `json:"membershipType"`
+			MembershipID            string `json:"membershipId"`
+			DisplayName             string `json:"displayName"`
+		} `json:"bnetMembership"`
+		ProfilesWithErrors []interface{} `json:"profilesWithErrors"`
+	}
+	ErrorCode       int    `json:"ErrorCode"`
+	ThrottleSeconds int    `json:"ThrottleSeconds"`
+	ErrorStatus     string `json:"ErrorStatus"`
+	Message         string `json:"Message"`
+	MessageData     struct {
+	} `json:"MessageData"`
+}
+
+type EquipItemResponse struct {
+	Response        int    `json:"Response"`
 	ErrorCode       int    `json:"ErrorCode"`
 	ThrottleSeconds int    `json:"ThrottleSeconds"`
 	ErrorStatus     string `json:"ErrorStatus"`

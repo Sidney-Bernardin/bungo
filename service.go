@@ -3,14 +3,11 @@ package bungo
 import (
 	"errors"
 	"net/http"
-
-	"golang.org/x/oauth2"
 )
 
 type Service struct {
 	client   *http.Client
 	basePath string // API endpoint base URL.
-	config   *Config
 
 	// App      *AppService
 	// User     *UserService
@@ -23,12 +20,7 @@ type Service struct {
 	// Fireteam *FireteamService
 }
 
-type Config struct {
-	ApiKey      string
-	OAuthConfig *oauth2.Config
-}
-
-func NewService(client *http.Client, config *Config) (*Service, error) {
+func NewService(client *http.Client) (*Service, error) {
 
 	if client == nil {
 		return nil, errors.New("client is nil")
@@ -38,7 +30,6 @@ func NewService(client *http.Client, config *Config) (*Service, error) {
 	s := &Service{
 		client:   client,
 		basePath: basePath,
-		config:   config,
 	}
 
 	// Create the sub services.
