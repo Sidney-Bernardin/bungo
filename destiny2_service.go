@@ -24,7 +24,7 @@ type GetDestinyManifestCall struct {
 	header http.Header
 }
 
-func (c *GetDestinyManifestCall) Hander() http.Header {
+func (c *GetDestinyManifestCall) Header() http.Header {
 
 	if c.header == nil {
 		c.header = make(http.Header)
@@ -87,7 +87,7 @@ type GetDestinyEntityDefinitionCall struct {
 	header         http.Header
 }
 
-func (c *GetDestinyEntityDefinitionCall) Hander() http.Header {
+func (c *GetDestinyEntityDefinitionCall) Header() http.Header {
 
 	if c.header == nil {
 		c.header = make(http.Header)
@@ -155,7 +155,7 @@ type SearchDestinyPlayerCall struct {
 	header         http.Header
 }
 
-func (c *SearchDestinyPlayerCall) Hander() http.Header {
+func (c *SearchDestinyPlayerCall) Header() http.Header {
 
 	if c.header == nil {
 		c.header = make(http.Header)
@@ -226,7 +226,7 @@ type EquipItemCall struct {
 	header      http.Header
 }
 
-func (c *EquipItemCall) Hander() http.Header {
+func (c *EquipItemCall) Header() http.Header {
 
 	if c.header == nil {
 		c.header = make(http.Header)
@@ -296,7 +296,7 @@ type GetLinkedProfilesCall struct {
 	header         http.Header
 }
 
-func (c *GetLinkedProfilesCall) Hander() http.Header {
+func (c *GetLinkedProfilesCall) Header() http.Header {
 
 	if c.header == nil {
 		c.header = make(http.Header)
