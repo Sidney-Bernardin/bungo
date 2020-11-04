@@ -15,6 +15,10 @@ func NewDestiny2Service(s *Service) *destiny2Service {
 	return &destiny2Service{s: s}
 }
 
+// ============================================================================
+// Get Destiny Manifest
+// ============================================================================
+
 func (s *destiny2Service) GetDestinyManifest() *GetDestinyManifestCall {
 	return &GetDestinyManifestCall{s: s.s}
 }
@@ -71,6 +75,10 @@ func (c *GetDestinyManifestCall) doRequest() (*http.Response, error) {
 	// Execute the request.
 	return c.s.client.Do(req)
 }
+
+// ============================================================================
+// Get Destiny Entity Definition
+// ============================================================================
 
 func (s *destiny2Service) GetDestinyEntityDefinition(entityType, hashIdentifier string) *GetDestinyEntityDefinitionCall {
 	return &GetDestinyEntityDefinitionCall{
@@ -137,6 +145,10 @@ func (c *GetDestinyEntityDefinitionCall) doRequest() (*http.Response, error) {
 	// Execute the request.
 	return c.s.client.Do(req)
 }
+
+// ============================================================================
+// SearchDestinyPlayer
+// ============================================================================
 
 func (s *destiny2Service) SearchDestinyPlayer(membershipType, displayName string) *SearchDestinyPlayerCall {
 	return &SearchDestinyPlayerCall{
@@ -216,69 +228,9 @@ func (c *SearchDestinyPlayerCall) doRequest() (*http.Response, error) {
 	return c.s.client.Do(req)
 }
 
-func (s *destiny2Service) EquipItem(body *ItemActionRequest) *EquipItemCall {
-	return &EquipItemCall{s: s.s, requestBody: body}
-}
-
-type EquipItemCall struct {
-	s           *Service
-	requestBody *ItemActionRequest
-	header      http.Header
-}
-
-func (c *EquipItemCall) Header() http.Header {
-
-	if c.header == nil {
-		c.header = make(http.Header)
-	}
-
-	return c.header
-}
-
-func (c *EquipItemCall) Do() (*EquipItemResponse, error) {
-
-	// Make the request.
-	res, err := c.doRequest()
-	if err != nil {
-		return nil, err
-	}
-	defer res.Body.Close()
-
-	// Decode the response.
-	var ret = &EquipItemResponse{}
-	if err := json.NewDecoder(res.Body).Decode(ret); err != nil {
-		return nil, err
-	}
-
-	// Check the error code.
-	if ret.ErrorCode != 1 {
-		return nil, fmt.Errorf("%s: %s", ret.ErrorStatus, ret.Message)
-	}
-
-	return ret, nil
-}
-
-func (c *EquipItemCall) doRequest() (*http.Response, error) {
-
-	// Setup url.
-	url := fmt.Sprintf("%sDestiny2/Actions/Items/EquipItem", c.s.basePath)
-
-	// Marshal the request body.
-	jsonValue, err := json.Marshal(c.requestBody)
-	if err != nil {
-		return nil, err
-	}
-
-	// Create request.
-	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonValue))
-	if err != nil {
-		return nil, err
-	}
-	req.Header = c.header
-
-	// Execute the request.
-	return c.s.client.Do(req)
-}
+// ============================================================================
+// Get Linked Profiles
+// ============================================================================
 
 func (s *destiny2Service) GetLinkedProfiles(membershipType, membershipId string) *GetLinkedProfilesCall {
 	return &GetLinkedProfilesCall{
@@ -345,6 +297,155 @@ func (c *GetLinkedProfilesCall) doRequest() (*http.Response, error) {
 
 	// Create request.
 	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		return nil, err
+	}
+	req.Header = c.header
+
+	// Execute the request.
+	return c.s.client.Do(req)
+}
+
+// ============================================================================
+// Get Item
+// ============================================================================
+
+func (s *destiny2Service) GetItem(memType, memID, itemID string) *GetItemCall {
+	return &GetItemCall{
+		s:       s.s,
+		memType: memType,
+		memID:   memID,
+		itemID:  itemID,
+	}
+}
+
+type GetItemCall struct {
+	s *Service
+
+	queryParams map[string]string
+	header      http.Header
+
+	memType string
+	memID   string
+	itemID  string
+}
+
+func (c *GetItemCall) Header() http.Header {
+
+	if c.header == nil {
+		c.header = make(http.Header)
+	}
+
+	return c.header
+}
+
+func (c *GetItemCall) Components(arg string) *GetItemCall {
+	c.queryParams["components"] = arg
+	return c
+}
+
+func (c *GetItemCall) Do() (*EquipItemResponse, error) {
+
+	// Make the request.
+	res, err := c.doRequest()
+	if err != nil {
+		return nil, err
+	}
+	defer res.Body.Close()
+
+	// Decode the response.
+	var ret = &EquipItemResponse{}
+	if err := json.NewDecoder(res.Body).Decode(ret); err != nil {
+		return nil, err
+	}
+
+	// Check the error code.
+	if ret.ErrorCode != 1 {
+		return nil, fmt.Errorf("%s: %s", ret.ErrorStatus, ret.Message)
+	}
+
+	return ret, nil
+}
+
+func (c *GetItemCall) doRequest() (*http.Response, error) {
+
+	// Setup url.
+	url := fmt.Sprintf("%sDestiny2/%s/Profile/%s/Item/%s?",
+		c.s.basePath,
+		c.memType,
+		c.memID,
+		c.itemID)
+
+	// Create request.
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		return nil, err
+	}
+	req.Header = c.header
+
+	// Execute the request.
+	return c.s.client.Do(req)
+}
+
+// ============================================================================
+// Equip Item
+// ============================================================================
+
+func (s *destiny2Service) EquipItem(body *ItemActionRequest) *EquipItemCall {
+	return &EquipItemCall{s: s.s, requestBody: body}
+}
+
+type EquipItemCall struct {
+	s           *Service
+	requestBody *ItemActionRequest
+	header      http.Header
+}
+
+func (c *EquipItemCall) Header() http.Header {
+
+	if c.header == nil {
+		c.header = make(http.Header)
+	}
+
+	return c.header
+}
+
+func (c *EquipItemCall) Do() (*EquipItemResponse, error) {
+
+	// Make the request.
+	res, err := c.doRequest()
+	if err != nil {
+		return nil, err
+	}
+	defer res.Body.Close()
+
+	// Decode the response.
+	var ret = &EquipItemResponse{}
+	if err := json.NewDecoder(res.Body).Decode(ret); err != nil {
+		return nil, err
+	}
+
+	// Check the error code.
+	if ret.ErrorCode != 1 {
+		return nil, fmt.Errorf("%s: %s", ret.ErrorStatus, ret.Message)
+	}
+
+	return ret, nil
+}
+
+func (c *EquipItemCall) doRequest() (*http.Response, error) {
+
+	// Setup url.
+	url := fmt.Sprintf("%sDestiny2/Actions/Items/EquipItem", c.s.basePath)
+
+	// Marshal the request body.
+	jsonValue, err := json.Marshal(c.requestBody)
+	if err != nil {
+		return nil, err
+	}
+
+	// Create request.
+	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonValue))
 	if err != nil {
 		return nil, err
 	}
