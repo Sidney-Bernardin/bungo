@@ -307,6 +307,92 @@ func (c *GetLinkedProfilesCall) doRequest() (*http.Response, error) {
 }
 
 // ============================================================================
+// Get Character
+// ============================================================================
+
+func (s *destiny2Service) GetCharacter(memType, memID, charID string) *GetCharacterCall {
+	return &GetCharacterCall{
+		s:       s.s,
+		memType: memType,
+		memID:   memID,
+		charID:  charID,
+	}
+}
+
+type GetCharacterCall struct {
+	s *Service
+
+	queryParams map[string]string
+	header      http.Header
+
+	memType string
+	memID   string
+	charID  string
+}
+
+func (c *GetCharacterCall) Header() http.Header {
+
+	if c.header == nil {
+		c.header = make(http.Header)
+	}
+
+	return c.header
+}
+
+func (c *GetCharacterCall) Components(arg string) *GetCharacterCall {
+	c.queryParams["components"] = arg
+	return c
+}
+
+func (c *GetCharacterCall) Do() (*EquipItemResponse, error) {
+
+	// Make the request.
+	res, err := c.doRequest()
+	if err != nil {
+		return nil, err
+	}
+	defer res.Body.Close()
+
+	// Decode the response.
+	var ret = &EquipItemResponse{}
+	if err := json.NewDecoder(res.Body).Decode(ret); err != nil {
+		return nil, err
+	}
+
+	// Check the error code.
+	if ret.ErrorCode != 1 {
+		return nil, fmt.Errorf("%s: %s", ret.ErrorStatus, ret.Message)
+	}
+
+	return ret, nil
+}
+
+func (c *GetCharacterCall) doRequest() (*http.Response, error) {
+
+	// Setup url.
+	url := fmt.Sprintf("%sDestiny2/%s/Profile/%s/Character/%s?",
+		c.s.basePath,
+		c.memType,
+		c.memID,
+		c.charID)
+
+	// Create request.
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		return nil, err
+	}
+	req.Header = c.header
+
+	// Atatch params params to the url.
+	for k, v := range c.queryParams {
+		url += k + "=" + v + "&"
+	}
+
+	// Execute the request.
+	return c.s.client.Do(req)
+}
+
+// ============================================================================
 // Get Item
 // ============================================================================
 
@@ -382,6 +468,11 @@ func (c *GetItemCall) doRequest() (*http.Response, error) {
 		return nil, err
 	}
 	req.Header = c.header
+
+	// Atatch params params to the url.
+	for k, v := range c.queryParams {
+		url += k + "=" + v + "&"
+	}
 
 	// Execute the request.
 	return c.s.client.Do(req)
