@@ -364,11 +364,12 @@ func (c *GetCharacterCall) Do() (*DestinyCharacterResponse, error) {
 	if ret.CharacterEquipment.ErrorCode == 1 {
 		return ret, nil
 	}
-	if ret.Characters.ErrorCode != 1 {
+
+	if ret.Characters.ErrorStatus != "" && ret.Characters.ErrorStatus != " " {
 		return nil, fmt.Errorf("%s: %s", ret.Characters.ErrorStatus, ret.Characters.Message)
 	}
-	if ret.CharacterEquipment.ErrorCode != 1 {
-		return nil, fmt.Errorf("%s: %s", ret.CharacterEquipment.ErrorStatus, ret.CharacterEquipment.Message)
+	if ret.CharacterEquipment.ErrorStatus != "" && ret.CharacterEquipment.ErrorStatus != " " {
+		return nil, fmt.Errorf("%s: %s", ret.Characters.ErrorStatus, ret.Characters.Message)
 	}
 
 	return ret, nil
