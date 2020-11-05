@@ -9,27 +9,14 @@ import (
 )
 
 var (
-	apiKey = flag.String("apikey", "", "Your bungie api key.")
+	apiKey = flag.String("apiKey", "", "Your bungie api key.")
 	lookAt = flag.String("lookAt", "", "Set lookAt to the name of a test function to see the response. Example: go test -lookAt 'TestGetDestinyManifest' .")
 	pretty = flag.Bool("pretty", false, "If you are using lookAt, you can set pretty to format the response.")
 )
 
-func TestGetDestinyManifest(t *testing.T) {
+func printResponse(t *testing.T, res interface{}, funcName string) {
 
-	// Create service.
-	s, err := NewService(&http.Client{})
-	if err != nil {
-		t.Fatalf("couln't create service: %v", err)
-	}
-
-	// Get destiny manifest.
-	res, err := s.Destiny2.GetDestinyManifest().Do()
-	if err != nil {
-		t.Fatalf("couldn't get manifest: %v", err)
-	}
-
-	// Print response.
-	if *lookAt == "TestGetDestinyManifest" {
+	if *lookAt == funcName {
 
 		if *pretty {
 
@@ -49,5 +36,74 @@ func TestGetDestinyManifest(t *testing.T) {
 			t.Fatalf("couldn't marshal response: %s", err)
 		}
 		fmt.Printf("%s\n", string(marshaled))
+	}
+}
+
+func TestGetDestinyManifest(t *testing.T) {
+
+	// Create service.
+	s, err := NewService(&http.Client{}, *apiKey)
+	if err != nil {
+		t.Fatalf("couln't create service: %v", err)
+	}
+
+	// Get destiny manifest.
+	res, err := s.Destiny2.GetDestinyManifest().Do()
+	if err != nil {
+		t.Fatalf("couldn't get manifest: %v", err)
+	}
+
+	// Print response.
+	printResponse(t, res, "TestGetDestinyManifest")
+}
+
+func TestGetDestinyEntityDefinition(t *testing.T) {
+
+	// Create service.
+	s, err := NewService(&http.Client{}, *apiKey)
+	if err != nil {
+		t.Fatalf("couln't create service: %v", err)
+	}
+
+	// Get destiny entity definition.
+	res, err := s.Destiny2.GetDestinyEntityDefinition(
+		"DestinyEquipmentSlotDefinition",
+		"3448274439", // helmet bucket hash
+	).Do()
+	if err != nil {
+		t.Fatalf("couldn't get entity definition: %v", err)
+	}
+
+	// Print response.
+	printResponse(t, res, "TestGetDestinyEntityDefinition")
+}
+
+func TestSearchDestinyPlayer(t *testing.T) {
+
+	tables := []struct {
+		returnOriginalProfile string
+	}{
+		{"true"},
+		{"false"},
+	}
+
+	// Create service.
+	s, err := NewService(&http.Client{}, *apiKey)
+	if err != nil {
+		t.Fatalf("couln't create service: %v", err)
+	}
+
+	// Run test cases.
+	for _, table := range tables {
+		res, err := s.Destiny2.SearchDestinyPlayer("2", "a_neutrino").
+			ReturnOriginalProfile(table.returnOriginalProfile).
+			Do()
+
+		if err != nil {
+			t.Fatalf("couldn't get entity definition: %v", err)
+		}
+
+		// Print response.
+		printResponse(t, res, "TestSearchDestinyPlayer")
 	}
 }

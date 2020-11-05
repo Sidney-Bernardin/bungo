@@ -16,16 +16,13 @@ func NewDestiny2Service(s *Service) *destiny2Service {
 	return &destiny2Service{s: s}
 }
 
-// ============================================================================
-// Get Destiny Manifest
-// ============================================================================
-
 func (s *destiny2Service) GetDestinyManifest() *GetDestinyManifestCall {
 	return &GetDestinyManifestCall{s: s.s}
 }
 
 type GetDestinyManifestCall struct {
-	s      *Service
+	s *Service
+
 	header http.Header
 }
 
@@ -77,31 +74,25 @@ func (c *GetDestinyManifestCall) doRequest() (*http.Response, error) {
 	return c.s.client.Do(req)
 }
 
-// ============================================================================
-// Get Destiny Entity Definition
-// ============================================================================
-
 func (s *destiny2Service) GetDestinyEntityDefinition(entityType, hashIdentifier string) *GetDestinyEntityDefinitionCall {
 	return &GetDestinyEntityDefinitionCall{
 		s:              s.s,
+		header:         http.Header{},
 		entityType:     entityType,
 		hashIdentifier: hashIdentifier,
 	}
 }
 
 type GetDestinyEntityDefinitionCall struct {
-	s              *Service
+	s *Service
+
+	header http.Header
+
 	entityType     string
 	hashIdentifier string
-	header         http.Header
 }
 
 func (c *GetDestinyEntityDefinitionCall) Header() http.Header {
-
-	if c.header == nil {
-		c.header = make(http.Header)
-	}
-
 	return c.header
 }
 
@@ -141,44 +132,45 @@ func (c *GetDestinyEntityDefinitionCall) doRequest() (*http.Response, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	// If there is a preset api key, attach it to the request header.
+	if c.s.apiKey != "" && c.s.apiKey != " " {
+		c.header.Set("X-API-KEY", c.s.apiKey)
+	}
+
+	// Synchronize headers.
 	req.Header = c.header
 
 	// Execute the request.
 	return c.s.client.Do(req)
 }
 
-// ============================================================================
-// Search Destiny Player
-// ============================================================================
-
 func (s *destiny2Service) SearchDestinyPlayer(membershipType, displayName string) *SearchDestinyPlayerCall {
 	return &SearchDestinyPlayerCall{
 		s:              s.s,
+		queryParams:    map[string]string{},
+		header:         http.Header{},
 		membershipType: membershipType,
 		displayName:    displayName,
-		queryParams:    map[string]string{},
 	}
 }
 
 type SearchDestinyPlayerCall struct {
-	s              *Service
+	s *Service
+
+	queryParams map[string]string
+	header      http.Header
+
 	membershipType string
 	displayName    string
-	queryParams    map[string]string
-	header         http.Header
 }
 
 func (c *SearchDestinyPlayerCall) Header() http.Header {
-
-	if c.header == nil {
-		c.header = make(http.Header)
-	}
-
 	return c.header
 }
 
-func (c *SearchDestinyPlayerCall) ReturnOriginalProfile(arg string) *SearchDestinyPlayerCall {
-	c.queryParams["returnOriginalProfile"] = arg
+func (c *SearchDestinyPlayerCall) ReturnOriginalProfile(value string) *SearchDestinyPlayerCall {
+	c.queryParams["returnOriginalProfile"] = value
 	return c
 }
 
@@ -223,43 +215,44 @@ func (c *SearchDestinyPlayerCall) doRequest() (*http.Response, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	// If there is a preset api key, attach it to the request header.
+	if c.s.apiKey != "" && c.s.apiKey != " " {
+		c.header.Set("X-API-KEY", c.s.apiKey)
+	}
+
+	// Synchronize headers.
 	req.Header = c.header
 
 	// Execute the request.
 	return c.s.client.Do(req)
 }
 
-// ============================================================================
-// Get Linked Profiles
-// ============================================================================
-
-func (s *destiny2Service) GetLinkedProfiles(membershipType, membershipId string) *GetLinkedProfilesCall {
+func (s *destiny2Service) GetLinkedProfiles(membershipType, membershipID string) *GetLinkedProfilesCall {
 	return &GetLinkedProfilesCall{
 		s:              s.s,
-		membershipId:   membershipId,
+		header:         http.Header{},
+		membershipID:   membershipID,
 		membershipType: membershipType,
 	}
 }
 
 type GetLinkedProfilesCall struct {
-	s              *Service
-	membershipId   string
+	s *Service
+
+	queryParams map[string]string
+	header      http.Header
+
+	membershipID   string
 	membershipType string
-	queryParams    map[string]string
-	header         http.Header
 }
 
 func (c *GetLinkedProfilesCall) Header() http.Header {
-
-	if c.header == nil {
-		c.header = make(http.Header)
-	}
-
 	return c.header
 }
 
-func (c *GetLinkedProfilesCall) GetAllMemeberships(arg string) *GetLinkedProfilesCall {
-	c.queryParams["getAllMemberships"] = arg
+func (c *GetLinkedProfilesCall) GetAllMemeberships(value string) *GetLinkedProfilesCall {
+	c.queryParams["getAllMemberships"] = value
 	return c
 }
 
@@ -289,7 +282,10 @@ func (c *GetLinkedProfilesCall) Do() (*LinkedProfilesResponse, error) {
 func (c *GetLinkedProfilesCall) doRequest() (*http.Response, error) {
 
 	// Setup url.
-	url := fmt.Sprintf("%sDestiny2/%s/Profile/%s/LinkedProfiles?", c.s.basePath, c.membershipType, c.membershipId)
+	url := fmt.Sprintf("%sDestiny2/%s/Profile/%s/LinkedProfiles?",
+		c.s.basePath,
+		c.membershipType,
+		c.membershipID)
 
 	// Atatch params params to the url.
 	for k, v := range c.queryParams {
@@ -301,23 +297,27 @@ func (c *GetLinkedProfilesCall) doRequest() (*http.Response, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	// If there is a preset api key, attach it to the request header.
+	if c.s.apiKey != "" && c.s.apiKey != " " {
+		c.header.Set("X-API-KEY", c.s.apiKey)
+	}
+
+	// Synchronize headers.
 	req.Header = c.header
 
 	// Execute the request.
 	return c.s.client.Do(req)
 }
 
-// ============================================================================
-// Get Character
-// ============================================================================
-
-func (s *destiny2Service) GetCharacter(memType, memID, charID string) *GetCharacterCall {
+func (s *destiny2Service) GetCharacter(membershipType, membershipID, characterID string) *GetCharacterCall {
 	return &GetCharacterCall{
-		s:           s.s,
-		queryParams: map[string]string{},
-		memType:     memType,
-		memID:       memID,
-		charID:      charID,
+		s:              s.s,
+		queryParams:    map[string]string{},
+		header:         http.Header{},
+		membershipType: membershipType,
+		membershipID:   membershipID,
+		characterID:    characterID,
 	}
 }
 
@@ -327,22 +327,17 @@ type GetCharacterCall struct {
 	queryParams map[string]string
 	header      http.Header
 
-	memType string
-	memID   string
-	charID  string
+	membershipType string
+	membershipID   string
+	characterID    string
 }
 
 func (c *GetCharacterCall) Header() http.Header {
-
-	if c.header == nil {
-		c.header = make(http.Header)
-	}
-
 	return c.header
 }
 
-func (c *GetCharacterCall) Components(arg string) *GetCharacterCall {
-	c.queryParams["components"] = arg
+func (c *GetCharacterCall) Components(value string) *GetCharacterCall {
+	c.queryParams["components"] = value
 	return c
 }
 
@@ -377,15 +372,22 @@ func (c *GetCharacterCall) doRequest() (*http.Response, error) {
 	// Setup url.
 	url := fmt.Sprintf("%sDestiny2/%s/Profile/%s/Character/%s?",
 		c.s.basePath,
-		c.memType,
-		c.memID,
-		c.charID)
+		c.membershipType,
+		c.membershipID,
+		c.characterID)
 
 	// Create request.
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		return nil, err
 	}
+
+	// If there is a preset api key, attach it to the request header.
+	if c.s.apiKey != "" && c.s.apiKey != " " {
+		c.header.Set("X-API-KEY", c.s.apiKey)
+	}
+
+	// Synchronize headers.
 	req.Header = c.header
 
 	// Atatch params params to the url.
@@ -399,17 +401,18 @@ func (c *GetCharacterCall) doRequest() (*http.Response, error) {
 
 func (c *GetCharacterCall) decodeResponse(body io.ReadCloser) (*DestinyCharacterResponse, error) {
 
-	ret := &DestinyCharacterResponse{}
+	var ret *DestinyCharacterResponse
 	decoder := json.NewDecoder(body)
 
+	// Decode the response into the right type based on the components parameter.
 	switch c.queryParams["components"] {
 
-	case "200":
+	case "200", "Characters":
 
 		err := decoder.Decode(&ret.Characters)
 		return ret, err
 
-	case "205":
+	case "205", "CharacterEquipment":
 
 		err := decoder.Decode(&ret.CharacterInventories)
 		return ret, err
@@ -418,26 +421,23 @@ func (c *GetCharacterCall) decodeResponse(body io.ReadCloser) (*DestinyCharacter
 	return nil, fmt.Errorf("component %s is not yet supported", c.queryParams["components"])
 }
 
-// ============================================================================
-// Equip Item
-// ============================================================================
-
 func (s *destiny2Service) EquipItem(body *ItemActionRequest) *EquipItemCall {
-	return &EquipItemCall{s: s.s, requestBody: body}
+	return &EquipItemCall{
+		s:           s.s,
+		header:      http.Header{},
+		requestBody: body,
+	}
 }
 
 type EquipItemCall struct {
-	s           *Service
+	s *Service
+
+	header http.Header
+
 	requestBody *ItemActionRequest
-	header      http.Header
 }
 
 func (c *EquipItemCall) Header() http.Header {
-
-	if c.header == nil {
-		c.header = make(http.Header)
-	}
-
 	return c.header
 }
 
@@ -480,6 +480,13 @@ func (c *EquipItemCall) doRequest() (*http.Response, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	// If there is a preset api key, attach it to the request header.
+	if c.s.apiKey != "" && c.s.apiKey != " " {
+		c.header.Set("X-API-KEY", c.s.apiKey)
+	}
+
+	// Synchronize headers.
 	req.Header = c.header
 
 	// Execute the request.

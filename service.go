@@ -8,6 +8,7 @@ import (
 type Service struct {
 	client   *http.Client
 	basePath string // API endpoint base URL.
+	apiKey   string
 
 	// App      *AppService
 	// User     *UserService
@@ -20,7 +21,7 @@ type Service struct {
 	// Fireteam *FireteamService
 }
 
-func NewService(client *http.Client) (*Service, error) {
+func NewService(client *http.Client, apiKey string) (*Service, error) {
 
 	if client == nil {
 		return nil, errors.New("client is nil")
@@ -30,6 +31,7 @@ func NewService(client *http.Client) (*Service, error) {
 	s := &Service{
 		client:   client,
 		basePath: basePath,
+		apiKey:   apiKey,
 	}
 
 	// Create the sub services.
