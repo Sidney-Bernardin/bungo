@@ -321,8 +321,8 @@ type LinkedProfilesResponse struct {
 }
 
 type DestinyCharacterResponse struct {
-	Characters           SingleComponentResponseOfDestinyCharacterComponent
-	CharacterInventories SingleComponentResponseOfDestinyInventoryComponent
+	Characters         SingleComponentResponseOfDestinyCharacterComponent
+	CharacterEquipment SingleComponentResponseOfDestinyInventoryComponent
 }
 
 type SingleComponentResponseOfDestinyCharacterComponent struct {
@@ -373,8 +373,8 @@ type SingleComponentResponseOfDestinyCharacterComponent struct {
 					ProgressToNextLevel int `json:"progressToNextLevel"`
 					NextLevelAt         int `json:"nextLevelAt"`
 				} `json:"levelProgression"`
-				BaseCharacterLevel int `json:"baseCharacterLevel"`
-				PercentToNextLevel int `json:"percentToNextLevel"`
+				BaseCharacterLevel float64 `json:"baseCharacterLevel"`
+				PercentToNextLevel float64 `json:"percentToNextLevel"`
 			} `json:"data"`
 			Privacy int `json:"privacy"`
 		} `json:"character"`

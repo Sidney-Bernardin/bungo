@@ -231,6 +231,7 @@ func (c *SearchDestinyPlayerCall) doRequest() (*http.Response, error) {
 func (s *destiny2Service) GetLinkedProfiles(membershipType, membershipID string) *GetLinkedProfilesCall {
 	return &GetLinkedProfilesCall{
 		s:              s.s,
+		queryParams:    map[string]string{},
 		header:         http.Header{},
 		membershipID:   membershipID,
 		membershipType: membershipType,
@@ -357,11 +358,17 @@ func (c *GetCharacterCall) Do() (*DestinyCharacterResponse, error) {
 	}
 
 	// Check the error code.
-	if ret.Characters.ErrorCode != 1 {
-		if ret.CharacterInventories.ErrorCode != 1 {
-			return nil, fmt.Errorf("%s: %s", ret.CharacterInventories.ErrorStatus, ret.CharacterInventories.Message)
-		}
+	if ret.Characters.ErrorCode == 1 {
 		return ret, nil
+	}
+	if ret.CharacterEquipment.ErrorCode == 1 {
+		return ret, nil
+	}
+	if ret.Characters.ErrorCode != 1 {
+		return nil, fmt.Errorf("%s: %s", ret.Characters.ErrorStatus, ret.Characters.Message)
+	}
+	if ret.CharacterEquipment.ErrorCode != 1 {
+		return nil, fmt.Errorf("%s: %s", ret.CharacterEquipment.ErrorStatus, ret.CharacterEquipment.Message)
 	}
 
 	return ret, nil
@@ -375,6 +382,11 @@ func (c *GetCharacterCall) doRequest() (*http.Response, error) {
 		c.membershipType,
 		c.membershipID,
 		c.characterID)
+
+	// Atatch params params to the url.
+	for k, v := range c.queryParams {
+		url += k + "=" + v + "&"
+	}
 
 	// Create request.
 	req, err := http.NewRequest("GET", url, nil)
@@ -390,18 +402,13 @@ func (c *GetCharacterCall) doRequest() (*http.Response, error) {
 	// Synchronize headers.
 	req.Header = c.header
 
-	// Atatch params params to the url.
-	for k, v := range c.queryParams {
-		url += k + "=" + v + "&"
-	}
-
 	// Execute the request.
 	return c.s.client.Do(req)
 }
 
 func (c *GetCharacterCall) decodeResponse(body io.ReadCloser) (*DestinyCharacterResponse, error) {
 
-	var ret *DestinyCharacterResponse
+	var ret = &DestinyCharacterResponse{}
 	decoder := json.NewDecoder(body)
 
 	// Decode the response into the right type based on the components parameter.
@@ -414,7 +421,7 @@ func (c *GetCharacterCall) decodeResponse(body io.ReadCloser) (*DestinyCharacter
 
 	case "205", "CharacterEquipment":
 
-		err := decoder.Decode(&ret.CharacterInventories)
+		err := decoder.Decode(&ret.CharacterEquipment)
 		return ret, err
 	}
 
