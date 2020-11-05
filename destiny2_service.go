@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
 )
 
@@ -147,7 +148,7 @@ func (c *GetDestinyEntityDefinitionCall) doRequest() (*http.Response, error) {
 }
 
 // ============================================================================
-// SearchDestinyPlayer
+// Search Destiny Player
 // ============================================================================
 
 func (s *destiny2Service) SearchDestinyPlayer(membershipType, displayName string) *SearchDestinyPlayerCall {
@@ -312,10 +313,11 @@ func (c *GetLinkedProfilesCall) doRequest() (*http.Response, error) {
 
 func (s *destiny2Service) GetCharacter(memType, memID, charID string) *GetCharacterCall {
 	return &GetCharacterCall{
-		s:       s.s,
-		memType: memType,
-		memID:   memID,
-		charID:  charID,
+		s:           s.s,
+		queryParams: map[string]string{},
+		memType:     memType,
+		memID:       memID,
+		charID:      charID,
 	}
 }
 
@@ -344,7 +346,7 @@ func (c *GetCharacterCall) Components(arg string) *GetCharacterCall {
 	return c
 }
 
-func (c *GetCharacterCall) Do() (*EquipItemResponse, error) {
+func (c *GetCharacterCall) Do() (*DestinyCharacterResponse, error) {
 
 	// Make the request.
 	res, err := c.doRequest()
@@ -354,14 +356,17 @@ func (c *GetCharacterCall) Do() (*EquipItemResponse, error) {
 	defer res.Body.Close()
 
 	// Decode the response.
-	var ret = &EquipItemResponse{}
-	if err := json.NewDecoder(res.Body).Decode(ret); err != nil {
+	ret, err := c.decodeResponse(res.Body)
+	if err != nil {
 		return nil, err
 	}
 
 	// Check the error code.
-	if ret.ErrorCode != 1 {
-		return nil, fmt.Errorf("%s: %s", ret.ErrorStatus, ret.Message)
+	if ret.Characters.ErrorCode != 1 {
+		if ret.CharacterInventories.ErrorCode != 1 {
+			return nil, fmt.Errorf("%s: %s", ret.CharacterInventories.ErrorStatus, ret.CharacterInventories.Message)
+		}
+		return ret, nil
 	}
 
 	return ret, nil
@@ -392,90 +397,25 @@ func (c *GetCharacterCall) doRequest() (*http.Response, error) {
 	return c.s.client.Do(req)
 }
 
-// ============================================================================
-// Get Item
-// ============================================================================
+func (c *GetCharacterCall) decodeResponse(body io.ReadCloser) (*DestinyCharacterResponse, error) {
 
-func (s *destiny2Service) GetItem(memType, memID, itemID string) *GetItemCall {
-	return &GetItemCall{
-		s:       s.s,
-		memType: memType,
-		memID:   memID,
-		itemID:  itemID,
-	}
-}
+	ret := &DestinyCharacterResponse{}
+	decoder := json.NewDecoder(body)
 
-type GetItemCall struct {
-	s *Service
+	switch c.queryParams["components"] {
 
-	queryParams map[string]string
-	header      http.Header
+	case "200":
 
-	memType string
-	memID   string
-	itemID  string
-}
+		err := decoder.Decode(&ret.Characters)
+		return ret, err
 
-func (c *GetItemCall) Header() http.Header {
+	case "205":
 
-	if c.header == nil {
-		c.header = make(http.Header)
+		err := decoder.Decode(&ret.CharacterInventories)
+		return ret, err
 	}
 
-	return c.header
-}
-
-func (c *GetItemCall) Components(arg string) *GetItemCall {
-	c.queryParams["components"] = arg
-	return c
-}
-
-func (c *GetItemCall) Do() (*EquipItemResponse, error) {
-
-	// Make the request.
-	res, err := c.doRequest()
-	if err != nil {
-		return nil, err
-	}
-	defer res.Body.Close()
-
-	// Decode the response.
-	var ret = &EquipItemResponse{}
-	if err := json.NewDecoder(res.Body).Decode(ret); err != nil {
-		return nil, err
-	}
-
-	// Check the error code.
-	if ret.ErrorCode != 1 {
-		return nil, fmt.Errorf("%s: %s", ret.ErrorStatus, ret.Message)
-	}
-
-	return ret, nil
-}
-
-func (c *GetItemCall) doRequest() (*http.Response, error) {
-
-	// Setup url.
-	url := fmt.Sprintf("%sDestiny2/%s/Profile/%s/Item/%s?",
-		c.s.basePath,
-		c.memType,
-		c.memID,
-		c.itemID)
-
-	// Create request.
-	req, err := http.NewRequest("GET", url, nil)
-	if err != nil {
-		return nil, err
-	}
-	req.Header = c.header
-
-	// Atatch params params to the url.
-	for k, v := range c.queryParams {
-		url += k + "=" + v + "&"
-	}
-
-	// Execute the request.
-	return c.s.client.Do(req)
+	return nil, fmt.Errorf("component %s is not yet supported", c.queryParams["components"])
 }
 
 // ============================================================================
