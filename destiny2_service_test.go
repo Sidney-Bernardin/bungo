@@ -95,7 +95,7 @@ func TestSearchDestinyPlayer(t *testing.T) {
 
 	// Run test cases.
 	for _, table := range tables {
-		res, err := s.Destiny2.SearchDestinyPlayer("2", "a_neutrino").
+		res, err := s.Destiny2.SearchDestinyPlayer("2", "4611686018440565039").
 			ReturnOriginalProfile(table.returnOriginalProfile).
 			Do()
 
@@ -135,6 +135,36 @@ func TestGetLinkedProfiles(t *testing.T) {
 
 		// Print response.
 		printResponse(t, res, "TestSearchDestinyPlayer")
+	}
+}
+
+func TestGetProfile(t *testing.T) {
+
+	tables := []struct {
+		components string
+	}{
+		{"100"},
+		{"Profiles"},
+	}
+
+	// Create service.
+	s, err := NewService(&http.Client{}, *apiKey)
+	if err != nil {
+		t.Fatalf("couln't create service: %v", err)
+	}
+
+	// Run test cases.
+	for _, table := range tables {
+		res, err := s.Destiny2.GetProfile("2", "4611686018440565039").
+			Components(table.components).
+			Do()
+
+		if err != nil {
+			t.Fatalf("couldn't get profile: %v", err)
+		}
+
+		// Print response.
+		printResponse(t, res, "TestGetProfile")
 	}
 }
 

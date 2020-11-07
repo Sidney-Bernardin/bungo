@@ -311,6 +311,110 @@ func (c *GetLinkedProfilesCall) doRequest() (*http.Response, error) {
 	return c.s.client.Do(req)
 }
 
+func (s *destiny2Service) GetProfile(membershipType, membershipID string) *GetProfileCall {
+	return &GetProfileCall{
+		s:              s.s,
+		queryParams:    map[string]string{},
+		header:         http.Header{},
+		membershipType: membershipType,
+		membershipID:   membershipID,
+	}
+}
+
+type GetProfileCall struct {
+	s *Service
+
+	queryParams map[string]string
+	header      http.Header
+
+	membershipType string
+	membershipID   string
+}
+
+func (c *GetProfileCall) Header() http.Header {
+	return c.header
+}
+
+func (c *GetProfileCall) Components(value string) *GetProfileCall {
+	c.queryParams["components"] = value
+	return c
+}
+
+func (c *GetProfileCall) Do() (*GetProifleResponse, error) {
+
+	// Make the request.
+	res, err := c.doRequest()
+	if err != nil {
+		return nil, err
+	}
+	defer res.Body.Close()
+
+	// Decode the response.
+	ret, err := c.decodeResponse(res.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	// Check the error code.
+	if ret.Profiles.ErrorCode == 1 {
+		return ret, nil
+	}
+
+	if ret.Profiles.ErrorStatus != "" && ret.Profiles.ErrorStatus != " " {
+		return nil, fmt.Errorf("%s: %s", ret.Profiles.ErrorStatus, ret.Profiles.Message)
+	}
+
+	return ret, nil
+}
+
+func (c *GetProfileCall) doRequest() (*http.Response, error) {
+
+	// Setup url.
+	url := fmt.Sprintf("%sDestiny2/%s/Profile/%s?",
+		c.s.basePath,
+		c.membershipType,
+		c.membershipID)
+
+	// Atatch params params to the url.
+	for k, v := range c.queryParams {
+		url += k + "=" + v + "&"
+	}
+
+	// Create request.
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	// If there is a preset api key, attach it to the request header.
+	if c.s.apiKey != "" && c.s.apiKey != " " {
+		c.header.Set("X-API-KEY", c.s.apiKey)
+	}
+
+	// Synchronize headers.
+	req.Header = c.header
+
+	// Execute the request.
+	return c.s.client.Do(req)
+}
+
+func (c *GetProfileCall) decodeResponse(body io.ReadCloser) (*GetProifleResponse, error) {
+
+	var ret = &GetProifleResponse{}
+	decoder := json.NewDecoder(body)
+
+	// Decode the response into the right type based on the components parameter.
+	switch c.queryParams["components"] {
+
+	case "100", "Profiles":
+
+		err := decoder.Decode(&ret.Profiles)
+		return ret, err
+	}
+
+	return nil, fmt.Errorf("component %s is not yet supported", c.queryParams["components"])
+}
+
 func (s *destiny2Service) GetCharacter(membershipType, membershipID, characterID string) *GetCharacterCall {
 	return &GetCharacterCall{
 		s:              s.s,
