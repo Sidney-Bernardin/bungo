@@ -263,10 +263,10 @@ type GetEntityDefinitionResponse struct {
 		Redacted                          bool          `json:"redacted"`
 		Blacklisted                       bool          `json:"blacklisted"`
 	} `json:"Response"`
-	ErrorCode       int    `json:"ErrorCode"`
-	ThrottleSeconds int    `json:"ThrottleSeconds"`
-	ErrorStatus     string `json:"ErrorStatus"`
-	Message         string `json:"Message"`
+	ErrorCode       errorCode `json:"ErrorCode"`
+	ThrottleSeconds int       `json:"ThrottleSeconds"`
+	ErrorStatus     string    `json:"ErrorStatus"`
+	Message         string    `json:"Message"`
 	MessageData     struct {
 	} `json:"MessageData"`
 }
@@ -280,10 +280,10 @@ type SearchDestinyPlayerResponse struct {
 		MembershipID      string `json:"membershipId"`
 		DisplayName       string `json:"displayName"`
 	} `json:"Response"`
-	ErrorCode       int    `json:"ErrorCode"`
-	ThrottleSeconds int    `json:"ThrottleSeconds"`
-	ErrorStatus     string `json:"ErrorStatus"`
-	Message         string `json:"Message"`
+	ErrorCode       errorCode `json:"ErrorCode"`
+	ThrottleSeconds int       `json:"ThrottleSeconds"`
+	ErrorStatus     string    `json:"ErrorStatus"`
+	Message         string    `json:"Message"`
 	MessageData     struct {
 	} `json:"MessageData"`
 }
@@ -312,10 +312,10 @@ type LinkedProfilesResponse struct {
 		} `json:"bnetMembership"`
 		ProfilesWithErrors []interface{} `json:"profilesWithErrors"`
 	}
-	ErrorCode       int    `json:"ErrorCode"`
-	ThrottleSeconds int    `json:"ThrottleSeconds"`
-	ErrorStatus     string `json:"ErrorStatus"`
-	Message         string `json:"Message"`
+	ErrorCode       errorCode `json:"ErrorCode"`
+	ThrottleSeconds int       `json:"ThrottleSeconds"`
+	ErrorStatus     string    `json:"ErrorStatus"`
+	Message         string    `json:"Message"`
 	MessageData     struct {
 	} `json:"MessageData"`
 }
@@ -346,10 +346,10 @@ type SingleComponentResponseOfDestinyProfileComponent struct {
 			Privacy int `json:"privacy"`
 		} `json:"profile"`
 	} `json:"Response"`
-	ErrorCode       int    `json:"ErrorCode"`
-	ThrottleSeconds int    `json:"ThrottleSeconds"`
-	ErrorStatus     string `json:"ErrorStatus"`
-	Message         string `json:"Message"`
+	ErrorCode       errorCode `json:"ErrorCode"`
+	ThrottleSeconds int       `json:"ThrottleSeconds"`
+	ErrorStatus     string    `json:"ErrorStatus"`
+	Message         string    `json:"Message"`
 	MessageData     struct {
 	} `json:"MessageData"`
 }
@@ -413,10 +413,10 @@ type SingleComponentResponseOfDestinyCharacterComponent struct {
 			Privacy int `json:"privacy"`
 		} `json:"character"`
 	} `json:"Response"`
-	ErrorCode       int    `json:"ErrorCode"`
-	ThrottleSeconds int    `json:"ThrottleSeconds"`
-	ErrorStatus     string `json:"ErrorStatus"`
-	Message         string `json:"Message"`
+	ErrorCode       errorCode `json:"ErrorCode"`
+	ThrottleSeconds int       `json:"ThrottleSeconds"`
+	ErrorStatus     string    `json:"ErrorStatus"`
+	Message         string    `json:"Message"`
 	MessageData     struct {
 	} `json:"MessageData"`
 }
@@ -452,20 +452,20 @@ type SingleComponentResponseOfDestinyInventoryComponent struct {
 			Privacy int `json:"privacy"`
 		} `json:"equipment"`
 	} `json:"Response"`
-	ErrorCode       int    `json:"ErrorCode"`
-	ThrottleSeconds int    `json:"ThrottleSeconds"`
-	ErrorStatus     string `json:"ErrorStatus"`
-	Message         string `json:"Message"`
+	ErrorCode       errorCode `json:"ErrorCode"`
+	ThrottleSeconds int       `json:"ThrottleSeconds"`
+	ErrorStatus     string    `json:"ErrorStatus"`
+	Message         string    `json:"Message"`
 	MessageData     struct {
 	} `json:"MessageData"`
 }
 
 type EquipItemResponse struct {
-	Response        int    `json:"Response"`
-	ErrorCode       int    `json:"ErrorCode"`
-	ThrottleSeconds int    `json:"ThrottleSeconds"`
-	ErrorStatus     string `json:"ErrorStatus"`
-	Message         string `json:"Message"`
+	Response        int       `json:"Response"`
+	ErrorCode       errorCode `json:"ErrorCode"`
+	ThrottleSeconds int       `json:"ThrottleSeconds"`
+	ErrorStatus     string    `json:"ErrorStatus"`
+	Message         string    `json:"Message"`
 	MessageData     struct {
 	} `json:"MessageData"`
 }

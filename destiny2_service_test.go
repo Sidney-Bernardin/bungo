@@ -42,7 +42,7 @@ func printResponse(t *testing.T, res interface{}, funcName string) {
 func TestGetDestinyManifest(t *testing.T) {
 
 	// Create service.
-	s, err := NewService(&http.Client{}, *apiKey)
+	s, err := NewService(&http.Client{}, "")
 	if err != nil {
 		t.Fatalf("couln't create service: %v", err)
 	}
@@ -160,7 +160,7 @@ func TestGetProfile(t *testing.T) {
 			Do()
 
 		if err != nil {
-			t.Fatalf("couldn't get profile: %v", err)
+			t.Fatalf("couldn't get profile (components: %s): %v", table.components, err)
 		}
 
 		// Print response.
@@ -195,7 +195,7 @@ func TestGetCharacter(t *testing.T) {
 			Do()
 
 		if err != nil {
-			t.Fatalf("couldn't get character: %v\ncomponents: %s", err, table.components)
+			t.Fatalf("couldn't get character (components: %s): %v", table.components, err)
 		}
 
 		// Print response.

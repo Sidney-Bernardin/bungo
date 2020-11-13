@@ -356,11 +356,7 @@ func (c *GetProfileCall) Do() (*GetProifleResponse, error) {
 	}
 
 	// Check the error code.
-	if ret.Profiles.ErrorCode == 1 {
-		return ret, nil
-	}
-
-	if ret.Profiles.ErrorStatus != "" && ret.Profiles.ErrorStatus != " " {
+	if ret.Profiles.ErrorCode.isError() {
 		return nil, fmt.Errorf("%s: %s", ret.Profiles.ErrorStatus, ret.Profiles.Message)
 	}
 
@@ -461,19 +457,22 @@ func (c *GetCharacterCall) Do() (*DestinyCharacterResponse, error) {
 		return nil, err
 	}
 
-	// Check the error code.
-	if ret.Characters.ErrorCode == 1 {
-		return ret, nil
-	}
-	if ret.CharacterEquipment.ErrorCode == 1 {
-		return ret, nil
+	// Check for errors.
+	if ret.CharacterEquipment.ErrorCode.isError() {
+		return nil, fmt.Errorf(
+			"%s: %s",
+			ret.CharacterEquipment.ErrorStatus,
+			ret.CharacterEquipment.Message,
+		)
 	}
 
-	if ret.Characters.ErrorStatus != "" && ret.Characters.ErrorStatus != " " {
-		return nil, fmt.Errorf("%s: %s", ret.Characters.ErrorStatus, ret.Characters.Message)
-	}
-	if ret.CharacterEquipment.ErrorStatus != "" && ret.CharacterEquipment.ErrorStatus != " " {
-		return nil, fmt.Errorf("%s: %s", ret.Characters.ErrorStatus, ret.Characters.Message)
+	// Check for errors.
+	if ret.Characters.ErrorCode.isError() {
+		return nil, fmt.Errorf(
+			"%s: %s",
+			ret.Characters.ErrorStatus,
+			ret.Characters.Message,
+		)
 	}
 
 	return ret, nil
