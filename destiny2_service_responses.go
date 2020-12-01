@@ -355,8 +355,9 @@ type SingleComponentResponseOfDestinyProfileComponent struct {
 }
 
 type DestinyCharacterResponse struct {
-	Characters         SingleComponentResponseOfDestinyCharacterComponent
-	CharacterEquipment SingleComponentResponseOfDestinyInventoryComponent
+	Characters           SingleComponentResponseOfDestinyCharacterComponent
+	CharacterInventories SingleComponentResponseOfDestinyInventoryComponent
+	CharacterEquipment   SingleComponentResponseOfDestinyInventoryComponent
 }
 
 type SingleComponentResponseOfDestinyCharacterComponent struct {

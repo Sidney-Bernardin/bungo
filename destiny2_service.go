@@ -475,6 +475,15 @@ func (c *GetCharacterCall) Do() (*DestinyCharacterResponse, error) {
 		)
 	}
 
+	// Check for errors.
+	if ret.CharacterInventories.ErrorCode.isError() {
+		return nil, fmt.Errorf(
+			"%s: %s",
+			ret.CharacterInventories.ErrorStatus,
+			ret.CharacterInventories.Message,
+		)
+	}
+
 	return ret, nil
 }
 
@@ -521,6 +530,11 @@ func (c *GetCharacterCall) decodeResponse(body io.ReadCloser) (*DestinyCharacter
 	case "200", "Characters":
 
 		err := decoder.Decode(&ret.Characters)
+		return ret, err
+
+	case "201", "CharacterInventories":
+
+		err := decoder.Decode(&ret.CharacterInventories)
 		return ret, err
 
 	case "205", "CharacterEquipment":

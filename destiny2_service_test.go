@@ -175,6 +175,8 @@ func TestGetCharacter(t *testing.T) {
 	}{
 		{"200"},
 		{"Characters"},
+		{"201"},
+		{"CharacterInventories"},
 		{"205"},
 		{"CharacterEquipment"},
 	}
