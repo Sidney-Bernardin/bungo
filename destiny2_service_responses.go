@@ -357,7 +357,7 @@ type SingleComponentResponseOfDestinyProfileComponent struct {
 type DestinyCharacterResponse struct {
 	Characters           SingleComponentResponseOfDestinyCharacterComponent
 	CharacterInventories SingleComponentResponseOfDestinyInventoryComponent
-	CharacterEquipment   SingleComponentResponseOfDestinyInventoryComponent
+	CharacterEquipment   SingleComponentResponseOfDestinyEquipmentComponent
 }
 
 type SingleComponentResponseOfDestinyCharacterComponent struct {
@@ -423,6 +423,45 @@ type SingleComponentResponseOfDestinyCharacterComponent struct {
 }
 
 type SingleComponentResponseOfDestinyInventoryComponent struct {
+	Response struct {
+		Inventory struct {
+			Data struct {
+				Items []struct {
+					ItemHash              int    `json:"itemHash"`
+					ItemInstanceID        string `json:"itemInstanceId"`
+					Quantity              int    `json:"quantity"`
+					BindStatus            int    `json:"bindStatus"`
+					Location              int    `json:"location"`
+					BucketHash            int    `json:"bucketHash"`
+					TransferStatus        int    `json:"transferStatus"`
+					Lockable              bool   `json:"lockable"`
+					State                 int    `json:"state"`
+					DismantlePermission   int    `json:"dismantlePermission"`
+					IsWrapper             bool   `json:"isWrapper"`
+					VersionNumber         int    `json:"versionNumber,omitempty"`
+					OverrideStyleItemHash int    `json:"overrideStyleItemHash,omitempty"`
+					MetricHash            int    `json:"metricHash,omitempty"`
+					MetricObjective       struct {
+						ObjectiveHash   int64 `json:"objectiveHash"`
+						Progress        int   `json:"progress"`
+						CompletionValue int   `json:"completionValue"`
+						Complete        bool  `json:"complete"`
+						Visible         bool  `json:"visible"`
+					} `json:"metricObjective,omitempty"`
+				} `json:"items"`
+			} `json:"data"`
+			Privacy int `json:"privacy"`
+		} `json:"inventory"`
+	} `json:"Response"`
+	ErrorCode       errorCode `json:"ErrorCode"`
+	ThrottleSeconds int       `json:"ThrottleSeconds"`
+	ErrorStatus     string    `json:"ErrorStatus"`
+	Message         string    `json:"Message"`
+	MessageData     struct {
+	} `json:"MessageData"`
+}
+
+type SingleComponentResponseOfDestinyEquipmentComponent struct {
 	Response struct {
 		Equipment struct {
 			Data struct {

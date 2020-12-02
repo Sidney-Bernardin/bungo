@@ -175,8 +175,6 @@ func TestGetCharacter(t *testing.T) {
 	}{
 		{"200"},
 		{"Characters"},
-		{"201"},
-		{"CharacterInventories"},
 		{"205"},
 		{"CharacterEquipment"},
 	}
@@ -193,9 +191,7 @@ func TestGetCharacter(t *testing.T) {
 			"2",
 			"4611686018458149036",
 			"2305843009294908257").
-			Components(table.components).
-			Do()
-
+			Components(table.components).Do()
 		if err != nil {
 			t.Fatalf("couldn't get character (components: %s): %v", table.components, err)
 		}
