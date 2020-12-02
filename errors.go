@@ -4,6 +4,17 @@ import "errors"
 
 type errorCode int
 
+type bungoError struct {
+	ErrorCode       errorCode
+	ThrottleSeconds int
+	ErrorStatus     string
+	Message         string
+}
+
+func (e *bungoError) Error() string {
+	return e.Message
+}
+
 var (
 	ErrUnauthorized = errors.New("access is denied due to invalid credentials")
 )

@@ -2,7 +2,7 @@ package bungo
 
 type GetDestinyManifestResponse struct {
 	Response        Response    `json:"Response"`
-	ErrorCode       int         `json:"ErrorCode"`
+	ErrorCode       errorCode   `json:"ErrorCode"`
 	ThrottleSeconds int         `json:"ThrottleSeconds"`
 	ErrorStatus     string      `json:"ErrorStatus"`
 	Message         string      `json:"Message"`
