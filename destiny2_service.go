@@ -3,7 +3,6 @@ package bungo
 import (
 	"bytes"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -460,8 +459,7 @@ func (c *GetCharacterCall) Do() (*DestinyCharacterResponse, error) {
 		// it's likely do to a bad oauth token.
 		if res.StatusCode == http.StatusUnauthorized {
 
-			msg := "401 - unauthorized: access is denied due to invalid credentials"
-			return nil, errors.New(msg)
+			return nil, ErrUnauthorized
 		}
 
 		return nil, err

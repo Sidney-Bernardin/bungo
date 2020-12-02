@@ -1,6 +1,12 @@
 package bungo
 
+import "errors"
+
 type errorCode int
+
+var (
+	ErrUnauthorized = errors.New("access is denied due to invalid credentials")
+)
 
 const (
 	ErrNone                                                  errorCode = 0
