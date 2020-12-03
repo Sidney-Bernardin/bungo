@@ -1,7 +1,7 @@
 package bungo
 
 type ItemActionRequest struct {
-	itemId         string
-	characterId    string
-	membershipType string
+	ItemId         string
+	CharacterId    string
+	MembershipType string
 }

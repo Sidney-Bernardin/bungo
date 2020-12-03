@@ -481,7 +481,7 @@ func (c *GetCharacterCall) Do() (*DestinyCharacterResponse, error) {
 	if err != nil {
 
 		// If the status code is 401 and we get a decode error,
-		// it's likely do to a bad oauth token.
+		// it's likely due to a bad oauth token.
 		if res.StatusCode == http.StatusUnauthorized {
 
 			return nil, ErrUnauthorized
