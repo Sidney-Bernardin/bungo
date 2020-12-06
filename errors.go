@@ -1,18 +1,33 @@
 package bungo
 
-import "errors"
+import (
+	"errors"
+	"fmt"
+)
 
 type errorCode int
 
-type bungoError struct {
+type BungoError struct {
 	ErrorCode       errorCode
 	ThrottleSeconds int
 	ErrorStatus     string
 	Message         string
 }
 
-func (e *bungoError) Error() string {
-	return e.Message
+func (e *BungoError) Error() string {
+	return fmt.Sprintf("[ (%v) (%v) (%s) (%s) ]", e.ErrorCode, e.ThrottleSeconds, e.ErrorStatus, e.Message)
+}
+
+func (e *BungoError) GetErrorCode() errorCode {
+	return e.ErrorCode
+}
+
+func (e *BungoError) GetThrottleSeconds() int {
+	return e.ThrottleSeconds
+}
+
+func (e *BungoError) GetErrorStatus() string {
+	return e.ErrorStatus
 }
 
 var (

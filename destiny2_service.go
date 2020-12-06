@@ -52,7 +52,7 @@ func (c *GetDestinyManifestCall) Do() (*GetDestinyManifestResponse, error) {
 
 	// Check the error code.
 	if ret.ErrorCode != 1 {
-		return nil, &bungoError{
+		return nil, &BungoError{
 			ErrorCode:       ret.ErrorCode,
 			ThrottleSeconds: ret.ThrottleSeconds,
 			ErrorStatus:     ret.ErrorStatus,
@@ -118,7 +118,7 @@ func (c *GetDestinyEntityDefinitionCall) Do() (*GetEntityDefinitionResponse, err
 
 	// Check the error code.
 	if ret.ErrorCode != 1 {
-		return nil, &bungoError{
+		return nil, &BungoError{
 			ErrorCode:       ret.ErrorCode,
 			ThrottleSeconds: ret.ThrottleSeconds,
 			ErrorStatus:     ret.ErrorStatus,
@@ -201,7 +201,7 @@ func (c *SearchDestinyPlayerCall) Do() (*SearchDestinyPlayerResponse, error) {
 
 	// Check the error code.
 	if ret.ErrorCode != 1 {
-		return nil, &bungoError{
+		return nil, &BungoError{
 			ErrorCode:       ret.ErrorCode,
 			ThrottleSeconds: ret.ThrottleSeconds,
 			ErrorStatus:     ret.ErrorStatus,
@@ -289,7 +289,7 @@ func (c *GetLinkedProfilesCall) Do() (*LinkedProfilesResponse, error) {
 
 	// Check the error code.
 	if ret.ErrorCode != 1 {
-		return nil, &bungoError{
+		return nil, &BungoError{
 			ErrorCode:       ret.ErrorCode,
 			ThrottleSeconds: ret.ThrottleSeconds,
 			ErrorStatus:     ret.ErrorStatus,
@@ -377,7 +377,7 @@ func (c *GetProfileCall) Do() (*GetProifleResponse, error) {
 
 	// Check the error code.
 	if ret.Profiles.ErrorCode.isError() {
-		return nil, &bungoError{
+		return nil, &BungoError{
 			ErrorCode:       ret.Profiles.ErrorCode,
 			ThrottleSeconds: ret.Profiles.ThrottleSeconds,
 			ErrorStatus:     ret.Profiles.ErrorStatus,
@@ -492,7 +492,7 @@ func (c *GetCharacterCall) Do() (*DestinyCharacterResponse, error) {
 
 	// Check for errors.
 	if ret.CharacterEquipment.ErrorCode.isError() {
-		return nil, &bungoError{
+		return nil, &BungoError{
 			ErrorCode:       ret.CharacterEquipment.ErrorCode,
 			ThrottleSeconds: ret.CharacterEquipment.ThrottleSeconds,
 			ErrorStatus:     ret.CharacterEquipment.ErrorStatus,
@@ -502,7 +502,7 @@ func (c *GetCharacterCall) Do() (*DestinyCharacterResponse, error) {
 
 	// Check for errors.
 	if ret.Characters.ErrorCode.isError() {
-		return nil, &bungoError{
+		return nil, &BungoError{
 			ErrorCode:       ret.Characters.ErrorCode,
 			ThrottleSeconds: ret.Characters.ThrottleSeconds,
 			ErrorStatus:     ret.Characters.ErrorStatus,
@@ -512,7 +512,7 @@ func (c *GetCharacterCall) Do() (*DestinyCharacterResponse, error) {
 
 	// Check for errors.
 	if ret.CharacterInventories.ErrorCode.isError() {
-		return nil, &bungoError{
+		return nil, &BungoError{
 			ErrorCode:       ret.CharacterInventories.ErrorCode,
 			ThrottleSeconds: ret.CharacterInventories.ThrottleSeconds,
 			ErrorStatus:     ret.CharacterInventories.ErrorStatus,
@@ -626,7 +626,7 @@ func (c *EquipItemCall) Do() (*EquipItemResponse, error) {
 
 	// Check the error code.
 	if ret.ErrorCode != 1 {
-		return nil, &bungoError{
+		return nil, &BungoError{
 			ErrorCode:       ret.ErrorCode,
 			ThrottleSeconds: ret.ThrottleSeconds,
 			ErrorStatus:     ret.ErrorStatus,
