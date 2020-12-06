@@ -614,6 +614,14 @@ func (c *EquipItemCall) Do() (*EquipItemResponse, error) {
 	// Decode the response.
 	var ret = &EquipItemResponse{}
 	if err := json.NewDecoder(res.Body).Decode(ret); err != nil {
+
+		// If the status code is 401 and we get a decode error,
+		// it's likely due to a bad oauth token.
+		if res.StatusCode == http.StatusUnauthorized {
+
+			return nil, ErrUnauthorized
+		}
+
 		return nil, err
 	}
 
