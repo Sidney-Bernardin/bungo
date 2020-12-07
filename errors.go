@@ -9,10 +9,10 @@ import (
 type errorCode int
 
 type BungoError struct {
-	ErrorCode       errorCode `json:"errorCode"`
-	ThrottleSeconds int       `json:"throttleSeconds"`
-	ErrorStatus     string    `json:"errorStatus"`
-	Message         string    `json:"message"`
+	ErrorCode       errorCode
+	ThrottleSeconds int
+	ErrorStatus     string
+	Message         string
 }
 
 func (e *BungoError) Error() string {
