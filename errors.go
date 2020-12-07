@@ -1,8 +1,9 @@
 package bungo
 
 import (
+	"encoding/json"
 	"errors"
-	"fmt"
+	"log"
 )
 
 type errorCode int
@@ -15,19 +16,13 @@ type BungoError struct {
 }
 
 func (e *BungoError) Error() string {
-	return fmt.Sprintf("[ (%v) (%v) (%s) (%s) ]", e.ErrorCode, e.ThrottleSeconds, e.ErrorStatus, e.Message)
-}
 
-func (e *BungoError) GetErrorCode() errorCode {
-	return e.ErrorCode
-}
+	out, err := json.Marshal(e)
+	if err != nil {
+		log.Printf("json.Marshal: %v", err)
+	}
 
-func (e *BungoError) GetThrottleSeconds() int {
-	return e.ThrottleSeconds
-}
-
-func (e *BungoError) GetErrorStatus() string {
-	return e.ErrorStatus
+	return string(out)
 }
 
 var (
