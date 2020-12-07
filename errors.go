@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"errors"
 	"log"
-	"strings"
 )
 
 type errorCode int
@@ -23,7 +22,7 @@ func (e *BungoError) Error() string {
 		log.Printf("json.Marshal: %v", err)
 	}
 
-	return strings.Replace(string(out), `\`, "", -1)
+	return string(out)
 }
 
 var (
