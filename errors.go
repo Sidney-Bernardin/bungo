@@ -23,7 +23,7 @@ func (e *BungoError) Error() string {
 		log.Printf("json.Marshal: %v", err)
 	}
 
-	return strings.Trim(string(out), `\`)
+	return strings.Replace(string(out), `\`, "", -1)
 }
 
 var (
