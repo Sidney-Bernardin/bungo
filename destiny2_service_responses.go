@@ -426,29 +426,7 @@ type SingleComponentResponseOfDestinyInventoryComponent struct {
 	Response struct {
 		Inventory struct {
 			Data struct {
-				Items []struct {
-					ItemHash              int    `json:"itemHash"`
-					ItemInstanceID        string `json:"itemInstanceId"`
-					Quantity              int    `json:"quantity"`
-					BindStatus            int    `json:"bindStatus"`
-					Location              int    `json:"location"`
-					BucketHash            int    `json:"bucketHash"`
-					TransferStatus        int    `json:"transferStatus"`
-					Lockable              bool   `json:"lockable"`
-					State                 int    `json:"state"`
-					DismantlePermission   int    `json:"dismantlePermission"`
-					IsWrapper             bool   `json:"isWrapper"`
-					VersionNumber         int    `json:"versionNumber,omitempty"`
-					OverrideStyleItemHash int    `json:"overrideStyleItemHash,omitempty"`
-					MetricHash            int    `json:"metricHash,omitempty"`
-					MetricObjective       struct {
-						ObjectiveHash   int64 `json:"objectiveHash"`
-						Progress        int   `json:"progress"`
-						CompletionValue int   `json:"completionValue"`
-						Complete        bool  `json:"complete"`
-						Visible         bool  `json:"visible"`
-					} `json:"metricObjective,omitempty"`
-				} `json:"items"`
+				Items []SingleComponentResponseOfDestinyInventoryComponentItem `json:"items"`
 			} `json:"data"`
 			Privacy int `json:"privacy"`
 		} `json:"inventory"`
@@ -459,6 +437,30 @@ type SingleComponentResponseOfDestinyInventoryComponent struct {
 	Message         string    `json:"Message"`
 	MessageData     struct {
 	} `json:"MessageData"`
+}
+
+type SingleComponentResponseOfDestinyInventoryComponentItem struct {
+	ItemHash              int    `json:"itemHash"`
+	ItemInstanceID        string `json:"itemInstanceId"`
+	Quantity              int    `json:"quantity"`
+	BindStatus            int    `json:"bindStatus"`
+	Location              int    `json:"location"`
+	BucketHash            int    `json:"bucketHash"`
+	TransferStatus        int    `json:"transferStatus"`
+	Lockable              bool   `json:"lockable"`
+	State                 int    `json:"state"`
+	DismantlePermission   int    `json:"dismantlePermission"`
+	IsWrapper             bool   `json:"isWrapper"`
+	VersionNumber         int    `json:"versionNumber,omitempty"`
+	OverrideStyleItemHash int    `json:"overrideStyleItemHash,omitempty"`
+	MetricHash            int    `json:"metricHash,omitempty"`
+	MetricObjective       struct {
+		ObjectiveHash   int64 `json:"objectiveHash"`
+		Progress        int   `json:"progress"`
+		CompletionValue int   `json:"completionValue"`
+		Complete        bool  `json:"complete"`
+		Visible         bool  `json:"visible"`
+	} `json:"metricObjective,omitempty"`
 }
 
 type SingleComponentResponseOfDestinyEquipmentComponent struct {
